@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}BlogPost{% endblock title %}
+{% load extras %}
+{% block body %}
+<div class="container my-4 ">
+    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-success">Post by: {{post.author}} </strong>
+            <h3 class="mb-0">Title: {{ post.title }}</h3>
+            <div class="mb-1 text-muted"> {{post.datetime}} </div>
+            <p class="mb-2"> {{post.content}} </p>
+            <div>
+                <a href="/blog" role="button" style="text-decoration: none;"
+                    class="text-white bg-green-500 border-0 px-1 py-1 mb-2 mr-2  focus:outline-none hover:bg-green-600 rounded text-lg">Go
+                    Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="container my-4 ">
+        <div
+            class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <h1 class="text-xl">Comments: ({{comments.count}}) </h1>
+                {% if user.is_authenticated %}
+                <form action="/blog/postComment" method="post">
+                    {% csrf_token %}
+                    <input
+                        class="bg-white rounded border border-gray-400 focus:outline-none focus:border-green-500 text-base px-1 py-1 mt-2 mb-2"
+                        type="text" name="comment" placeholder="Post Comment..." required>
+                    <input type="hidden" name="postSno" value="{{post.sno}}">
+                    <input type="hidden" name="parentSno" value="">
+                    <button
+                        class="text-white bg-green-500 border-0 px-1 py-1 ml-1 mb-2 mr-2  focus:outline-none hover:bg-green-600 rounded text-lg"
+                        type="submit">Comment</button>
+                </form>
+                {% else %}
+                <input
+                    class="bg-white rounded border border-gray-400 focus:outline-none focus:border-green-500 text-base px-1 py-1 mt-2 mb-2"
+                    type="text" name="comment" placeholder="Please Login to Post Comments...">
+                {% endif %}
+                {% for comment in comments %}
+                <div class="row my-3">
+                    {% load static %}
+                    <div class="col-md-1"> <img src="{% static "img/user.png" %}" alt="user "> </div>
+                    <div class="col-md-11">
+                        <b> {{comment.user.username}} </b>
+                        <div class="text-xs">at {{comment.timestamp}} </div>
+                        <div>{{comment.comment}}</div>
+                        {% if user.is_authenticated %}
+                        <button
+                            class="text-white bg-green-500 border-0 px-1 py-1 ml-1 mt-2 mb-2 mr-2  focus:outline-none hover:bg-green-600 rounded text-lg"
+                            type="button" data-toggle="collapse" data-target="#replyBox{{comment.sno}}"
+                            aria-expanded="false" aria-controls="replyBox{{comment.sno}}">
+                            Reply
+                        </button>
+                        {% else %}
+                        <button
+                            class="text-white bg-green-500 border-0 px-1 py-1 ml-1 mb-2 mr-2  focus:outline-none hover:bg-green-600 rounded text-lg"
+                            type="button" data-toggle="collapse" data-target="#replyBox{{comment.sno}}"
+                            aria-expanded="false" aria-controls="replyBox{{comment.sno}}" disabled>
+                            Login to reply
+                        </button>
+                        {% endif %}
+                        <div class="collapse" id="replyBox{{comment.sno}}">
+                            <div class="container my-4 ">
+                               
+                                        <form action="/blog/postComment" method="post">
+                                            {% csrf_token %}
+                                            <input
+                                                class="bg-white rounded border border-gray-400 focus:outline-none focus:border-green-500 text-base px-1 py-1 mt-2 mb-2"
+                                                type="text" name="comment" placeholder="Post Reply..." required>
+                                            <input type="hidden" name="postSno" value="{{post.sno}}">
+                                            <input type="hidden" name="parentSno" value="{{comment.sno}}">
+                                            <button
+                                                class="text-white bg-green-500 border-0 px-1 py-1 ml-1 mb-2 mr-2  focus:outline-none hover:bg-green-600 rounded text-lg"
+                                                type="submit">Reply</button>
+                                        </form>  
+                            </div>
+                        </div>
+                        <div
+                            class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                {% for reply in repDict|get_val:comment.sno %}
+                                <div class="row my-2">
+                                    <div class="col-md-1"> <img src="{% static "img/user.png" %}" alt="user "> </div>
+                                    <div class="col-md-11">
+                                        <b> {{reply.user.username}} </b> <div class="text-xs">at {{reply.timestamp}} </div>
+                                        {{reply.comment}}
+                                    </div>
+                                    <br>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
