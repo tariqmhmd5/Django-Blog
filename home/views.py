@@ -6,8 +6,22 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from blog.models import Post
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 def home(request):
+    if request.method=='POST':
+        title = request.POST['title']
+        Bcontent = request.POST['Bcontent']
+        author = request.user
+        slug = slugify(title)
+
+        blog = Post(title=title,author=author,slug=slug,content=Bcontent)
+        blog.save()
+        messages.success(request,"Your Blog is Posted sucessfully!")
+    else:
+        print('nahi chala')
+    
+
     return(render(request,'home/home.html'))
 
 def about(request):
