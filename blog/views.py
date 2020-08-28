@@ -6,7 +6,7 @@ from blog.templatetags import extras
 
 def blogHome(request):
     
-    allpost = Post.objects.all()
+    allpost = Post.objects.all().order_by('-timestamp')
     context ={
         'allpost': allpost
     }
