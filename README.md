@@ -1,8 +1,16 @@
-# Django-Blogify
-
 **Introduction**
 
-In this basic Django blog there are two app one is home another is blog. Home app handles all the urls pattern related to home page like login, signup whereas blog app handles the urls patterns related to the blog posts. 
+In this basic Django blog there are two app one is home another is blog. Home app handles all the urls pattern related to home page like login, signup whereas blog app handles the urls patterns related to the blog posts.
+
+Project Administration credentials:
+
+> username: **'admin'**
+
+> password: **'admin'**
+
+
+
+
 
 ---
 
@@ -13,8 +21,6 @@ In this basic Django blog there are two app one is home another is blog. Home ap
 *    chardet==3.0.4
 *    dj-database-url==0.5.0
 *    Django==3.1
-*    django-heroku==0.3.1
-*    gunicorn==20.0.4
 *    idna==2.8
 *    psycopg2==2.8.5
 *    pytz==2020.1
@@ -44,6 +50,6 @@ In this basic Django blog there are two app one is home another is blog. Home ap
 
 
 # Live Demo
+Check out this project live
 
-[Check out this project live](https://blogifyapp.herokuapp.com/)
- 
+[Click here](https://blogifyapp.herokuapp.com/)
